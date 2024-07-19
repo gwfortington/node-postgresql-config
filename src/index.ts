@@ -5,6 +5,17 @@ type Rules = {
   [P in keyof ConfigObject]: () => ConfigObject[P];
 };
 
+const rules: Rules = {
+  host: () => process.env.POSTGRESQL_HOST || 'localhost',
+  port: () => {
+    const port = Number(process.env.POSTGRESQL_PORT || 'default');
+    return isNaN(port) ? 5432 : port;
+  },
+  user: () => process.env.POSTGRESQL_USER!,
+  password: () => process.env.POSTGRESQL_PASSWORD!,
+  database: () => process.env.POSTGRESQL_DATABASE!,
+};
+
 type OverrideRules = {
   [P in keyof ConfigObject]?: () => ConfigObject[P];
 };
@@ -21,16 +32,6 @@ export default class Config {
     if (this.options && this.options.filePath) {
       dotenv.config({ path: this.options.filePath });
     }
-    const rules: Rules = {
-      host: () => process.env.POSTGRESQL_HOST || 'localhost',
-      port: () => {
-        const port = Number(process.env.POSTGRESQL_PORT || 'default');
-        return isNaN(port) ? 5432 : port;
-      },
-      user: () => process.env.POSTGRESQL_USER!,
-      password: () => process.env.POSTGRESQL_PASSWORD!,
-      database: () => process.env.POSTGRESQL_DATABASE!,
-    };
     if (this.options && this.options.overrideRules) {
       Object.assign(rules, this.options.overrideRules);
     }
