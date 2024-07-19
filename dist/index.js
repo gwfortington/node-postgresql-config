@@ -53,7 +53,7 @@ class Config {
         return __classPrivateFieldGet(this, _Config_object, "f");
     }
     get redactedObject() {
-        return Object.assign({}, __classPrivateFieldGet(this, _Config_object, "f"), __classPrivateFieldGet(this, _Config_object, "f") ? { password: '<redacted>' } : null);
+        return Object.assign({}, __classPrivateFieldGet(this, _Config_object, "f"), { password: '<redacted>' });
     }
 }
 _Config_object = new WeakMap();

@@ -54,10 +54,6 @@ export default class Config {
   }
 
   get redactedObject(): ConfigObject {
-    return Object.assign(
-      {},
-      this.#object,
-      this.#object ? { password: '<redacted>' } : null
-    );
+    return Object.assign({}, this.#object, { password: '<redacted>' });
   }
 }
