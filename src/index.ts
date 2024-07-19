@@ -5,9 +5,13 @@ type Rules = {
   [P in keyof ConfigObject]: () => ConfigObject[P];
 };
 
+type Overrides = {
+  [P in keyof Rules]?: () => Rules[P];
+};
+
 interface Options {
   filePath?: string;
-  overrides?: Rules;
+  overrides?: Overrides;
 }
 
 export default class Config {
@@ -39,9 +43,7 @@ export default class Config {
     };
     Object.keys(this.#object).forEach((value) => {
       if (typeof this.#object[value as keyof ConfigObject] == 'undefined') {
-        throw new Error(
-          `Error: PostgreSQL config property "${value}" is missing`
-        );
+        throw new Error(`PostgreSQL config property "${value}" is missing`);
       }
     });
   }

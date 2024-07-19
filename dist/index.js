@@ -45,7 +45,7 @@ class Config {
         }, "f");
         Object.keys(__classPrivateFieldGet(this, _Config_object, "f")).forEach((value) => {
             if (typeof __classPrivateFieldGet(this, _Config_object, "f")[value] == 'undefined') {
-                throw new Error(`Error: PostgreSQL config property "${value}" is missing`);
+                throw new Error(`PostgreSQL config property "${value}" is missing`);
             }
         });
     }
