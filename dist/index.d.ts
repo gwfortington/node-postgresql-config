@@ -1,16 +1,16 @@
-import { Config } from 'node-postgresql';
+import { Config as ConfigObject } from 'node-postgresql';
 type Rules = {
-    [P in keyof Config]: () => Config[P];
+    [P in keyof ConfigObject]: () => ConfigObject[P];
 };
 interface Options {
     filePath?: string;
     overrides?: Rules;
 }
-export default class {
+export default class Config {
     #private;
     private readonly options;
     constructor(options: Options);
-    get object(): Config;
-    get redactedObject(): Config;
+    get object(): ConfigObject;
+    get redactedObject(): ConfigObject;
 }
 export {};

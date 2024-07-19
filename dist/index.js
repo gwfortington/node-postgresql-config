@@ -13,13 +13,13 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var _object;
+var _Config_object;
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
-class {
+class Config {
     constructor(options) {
         this.options = options;
-        _object.set(this, void 0);
+        _Config_object.set(this, void 0);
         if (this.options && this.options.filePath) {
             dotenv_1.default.config({ path: this.options.filePath });
         }
@@ -36,25 +36,25 @@ class {
         if (this.options && this.options.overrides) {
             Object.assign(rules, this.options.overrides);
         }
-        __classPrivateFieldSet(this, _object, {
+        __classPrivateFieldSet(this, _Config_object, {
             host: rules.host(),
             port: rules.port(),
             user: rules.user(),
             password: rules.password(),
             database: rules.database(),
         }, "f");
-        Object.keys(__classPrivateFieldGet(this, _object, "f")).forEach((value) => {
-            if (typeof __classPrivateFieldGet(this, _object, "f")[value] == 'undefined') {
+        Object.keys(__classPrivateFieldGet(this, _Config_object, "f")).forEach((value) => {
+            if (typeof __classPrivateFieldGet(this, _Config_object, "f")[value] == 'undefined') {
                 throw new Error(`Error: PostgreSQL config property "${value}" is missing`);
             }
         });
     }
     get object() {
-        return __classPrivateFieldGet(this, _object, "f");
+        return __classPrivateFieldGet(this, _Config_object, "f");
     }
     get redactedObject() {
-        return Object.assign({}, __classPrivateFieldGet(this, _object, "f"), __classPrivateFieldGet(this, _object, "f") ? { password: '<redacted>' } : null);
+        return Object.assign({}, __classPrivateFieldGet(this, _Config_object, "f"), __classPrivateFieldGet(this, _Config_object, "f") ? { password: '<redacted>' } : null);
     }
 }
-_object = new WeakMap();
-exports.default = default_1;
+_Config_object = new WeakMap();
+exports.default = Config;
