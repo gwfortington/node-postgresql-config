@@ -33,8 +33,8 @@ class Config {
             password: () => process.env.POSTGRESQL_PASSWORD,
             database: () => process.env.POSTGRESQL_DATABASE,
         };
-        if (this.options && this.options.overrides) {
-            Object.assign(rules, this.options.overrides);
+        if (this.options && this.options.overrideRules) {
+            Object.assign(rules, this.options.overrideRules);
         }
         __classPrivateFieldSet(this, _Config_object, {
             host: rules.host(),

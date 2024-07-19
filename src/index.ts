@@ -5,13 +5,13 @@ type Rules = {
   [P in keyof ConfigObject]: () => ConfigObject[P];
 };
 
-type Overrides = {
-  [P in keyof Rules]?: () => Rules[P];
+type OverrideRules = {
+  [P in keyof ConfigObject]?: () => ConfigObject[P];
 };
 
 interface Options {
   filePath?: string;
-  overrides?: Overrides;
+  overrideRules?: OverrideRules;
 }
 
 export default class Config {
@@ -31,8 +31,8 @@ export default class Config {
       password: () => process.env.POSTGRESQL_PASSWORD!,
       database: () => process.env.POSTGRESQL_DATABASE!,
     };
-    if (this.options && this.options.overrides) {
-      Object.assign(rules, this.options.overrides);
+    if (this.options && this.options.overrideRules) {
+      Object.assign(rules, this.options.overrideRules);
     }
     this.#object = {
       host: rules.host(),
