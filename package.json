@@ -1,0 +1,26 @@
+{
+  "name": "node-postgresql-config",
+  "version": "1.0.0",
+  "description": "Setup PostgreSQL config object",
+  "author": "Grant Fortington",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "build": "npm run clean && tsc",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "node-postgresql": "github:gwfortington/node-postgresql"
+  },
+  "devDependencies": {
+    "@tsconfig/recommended": "^1.0.6",
+    "@types/node": "^20.14.9",
+    "rimraf": "^6.0.0"
+  },
+  "exports": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ]
+}
