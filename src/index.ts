@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import { Config as ConfigObject } from 'node-postgresql';
 
 type Rules = {
-  [P in keyof ConfigObject]: () => ConfigObject[P];
+  [P in keyof ConfigObject]: () => ConfigObject[P] | undefined;
 };
 
 const rules: Rules = {
@@ -11,9 +11,9 @@ const rules: Rules = {
     const port = Number(process.env.POSTGRESQL_PORT || 'default');
     return isNaN(port) ? 5432 : port;
   },
-  user: () => process.env.POSTGRESQL_USER!,
-  password: () => process.env.POSTGRESQL_PASSWORD!,
-  database: () => process.env.POSTGRESQL_DATABASE!,
+  user: () => process.env.POSTGRESQL_USER,
+  password: () => process.env.POSTGRESQL_PASSWORD,
+  database: () => process.env.POSTGRESQL_DATABASE,
 };
 
 type OverrideRules = {
@@ -36,11 +36,11 @@ export default class Config {
       Object.assign(rules, this.options.overrideRules);
     }
     this.#object = {
-      host: rules.host(),
-      port: rules.port(),
-      user: rules.user(),
-      password: rules.password(),
-      database: rules.database(),
+      host: rules.host()!,
+      port: rules.port()!,
+      user: rules.user()!,
+      password: rules.password()!,
+      database: rules.database()!,
     };
     Object.keys(this.#object).forEach((value) => {
       if (typeof this.#object[value as keyof ConfigObject] == 'undefined') {
