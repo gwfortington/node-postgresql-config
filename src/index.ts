@@ -28,7 +28,7 @@ interface Options {
 export default class Config {
   #object: ConfigObject;
 
-  constructor(private readonly options: Options) {
+  constructor(private readonly options?: Options) {
     if (this.options && this.options.filePath) {
       dotenv.config({ path: this.options.filePath });
     }

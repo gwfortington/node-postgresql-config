@@ -8,8 +8,8 @@ interface Options {
 }
 export default class Config {
     #private;
-    private readonly options;
-    constructor(options: Options);
+    private readonly options?;
+    constructor(options?: Options | undefined);
     get object(): ConfigObject;
     get redactedObject(): ConfigObject;
 }
