@@ -16,16 +16,16 @@ const rules: Rules = {
   database: () => process.env.POSTGRESQL_DATABASE!,
 };
 
-type OverrideRules = {
+export type OverrideRules = {
   [P in keyof ConfigObject]?: () => ConfigObject[P];
 };
 
-interface Options {
+export interface Options {
   filePath?: string;
   overrideRules?: OverrideRules;
 }
 
-export default class Config {
+export class Config {
   #object: ConfigObject;
 
   constructor(private readonly options?: Options) {

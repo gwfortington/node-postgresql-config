@@ -15,6 +15,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 var _Config_object;
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Config = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 const rules = {
     host: () => process.env.POSTGRESQL_HOST || 'localhost',
@@ -56,5 +57,5 @@ class Config {
         return Object.assign({}, __classPrivateFieldGet(this, _Config_object, "f"), { password: '<redacted>' });
     }
 }
+exports.Config = Config;
 _Config_object = new WeakMap();
-exports.default = Config;
