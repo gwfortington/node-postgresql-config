@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
-import { Config as ConfigObject } from 'node-postgresql';
+import { Config } from 'node-postgresql';
 
 type Rules = {
-  [P in keyof ConfigObject]: () => ConfigObject[P];
+  [P in keyof Config]: () => Config[P];
 };
 
 const rules: Rules = {
@@ -17,7 +17,7 @@ const rules: Rules = {
 };
 
 export type OverrideRules = {
-  [P in keyof ConfigObject]?: () => ConfigObject[P];
+  [P in keyof Config]?: () => Config[P];
 };
 
 export interface Options {
@@ -25,8 +25,8 @@ export interface Options {
   overrideRules?: OverrideRules;
 }
 
-export class Config {
-  #object: ConfigObject;
+export class PostgreSQLConfig {
+  #object: Config;
 
   constructor(private readonly options?: Options) {
     if (this.options && this.options.filePath) {
@@ -43,7 +43,7 @@ export class Config {
       database: rules.database(),
     };
     Object.keys(this.#object).forEach((value) => {
-      if (typeof this.#object[value as keyof ConfigObject] == 'undefined') {
+      if (typeof this.#object[value as keyof Config] == 'undefined') {
         throw new Error(`PostgreSQL config property "${value}" is missing`);
       }
     });
@@ -53,7 +53,7 @@ export class Config {
     return this.#object;
   }
 
-  get redactedObject(): ConfigObject {
+  get redactedObject(): Config {
     return Object.assign({}, this.#object, { password: '<redacted>' });
   }
 }

@@ -1,15 +1,15 @@
-import { Config as ConfigObject } from 'node-postgresql';
+import { Config } from 'node-postgresql';
 export type OverrideRules = {
-    [P in keyof ConfigObject]?: () => ConfigObject[P];
+    [P in keyof Config]?: () => Config[P];
 };
 export interface Options {
     filePath?: string;
     overrideRules?: OverrideRules;
 }
-export declare class Config {
+export declare class PostgreSQLConfig {
     #private;
     private readonly options?;
     constructor(options?: Options | undefined);
-    get object(): ConfigObject;
-    get redactedObject(): ConfigObject;
+    get object(): Config;
+    get redactedObject(): Config;
 }
