@@ -16,44 +16,36 @@ const rules: Rules = {
   database: () => process.env.POSTGRESQL_DATABASE!,
 };
 
-export type OverrideRules = {
+export type RuleOverrides = {
   [P in keyof Config]?: () => Config[P];
 };
 
 export interface Options {
   filePath?: string;
-  overrideRules?: OverrideRules;
+  ruleOverrides?: RuleOverrides;
 }
 
-export class PostgreSQLConfig {
-  #object: Config;
-
-  constructor(private readonly options?: Options) {
-    if (this.options && this.options.filePath) {
-      dotenv.config({ path: this.options.filePath });
+export const generate = (options?: Options): Config => {
+  if (options && options.filePath) {
+    dotenv.config({ path: options.filePath });
+  }
+  if (options && options.ruleOverrides) {
+    Object.assign(rules, options.ruleOverrides);
+  }
+  const config: Config = {
+    host: rules.host(),
+    port: rules.port(),
+    user: rules.user(),
+    password: rules.password(),
+    database: rules.database(),
+  };
+  Object.keys(config).forEach((value) => {
+    if (typeof config[value as keyof Config] == 'undefined') {
+      throw new Error(`PostgreSQL config property "${value}" is missing`);
     }
-    if (this.options && this.options.overrideRules) {
-      Object.assign(rules, this.options.overrideRules);
-    }
-    this.#object = {
-      host: rules.host(),
-      port: rules.port(),
-      user: rules.user(),
-      password: rules.password(),
-      database: rules.database(),
-    };
-    Object.keys(this.#object).forEach((value) => {
-      if (typeof this.#object[value as keyof Config] == 'undefined') {
-        throw new Error(`PostgreSQL config property "${value}" is missing`);
-      }
-    });
-  }
+  });
+  return config;
+};
 
-  get object() {
-    return this.#object;
-  }
-
-  get redactedObject(): Config {
-    return Object.assign({}, this.#object, { password: '<redacted>' });
-  }
-}
+export const redacted = (config: Config): Config =>
+  Object.assign({}, config, { password: '<redacted>' });

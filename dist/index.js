@@ -1,21 +1,9 @@
 "use strict";
-var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
-    if (kind === "m") throw new TypeError("Private method is not writable");
-    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
-    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
-    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
-};
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
-    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
-    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
-    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var _PostgreSQLConfig_object;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PostgreSQLConfig = void 0;
+exports.redacted = exports.generate = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 const rules = {
     host: () => process.env.POSTGRESQL_HOST || 'localhost',
@@ -27,35 +15,27 @@ const rules = {
     password: () => process.env.POSTGRESQL_PASSWORD,
     database: () => process.env.POSTGRESQL_DATABASE,
 };
-class PostgreSQLConfig {
-    constructor(options) {
-        this.options = options;
-        _PostgreSQLConfig_object.set(this, void 0);
-        if (this.options && this.options.filePath) {
-            dotenv_1.default.config({ path: this.options.filePath });
+const generate = (options) => {
+    if (options && options.filePath) {
+        dotenv_1.default.config({ path: options.filePath });
+    }
+    if (options && options.ruleOverrides) {
+        Object.assign(rules, options.ruleOverrides);
+    }
+    const config = {
+        host: rules.host(),
+        port: rules.port(),
+        user: rules.user(),
+        password: rules.password(),
+        database: rules.database(),
+    };
+    Object.keys(config).forEach((value) => {
+        if (typeof config[value] == 'undefined') {
+            throw new Error(`PostgreSQL config property "${value}" is missing`);
         }
-        if (this.options && this.options.overrideRules) {
-            Object.assign(rules, this.options.overrideRules);
-        }
-        __classPrivateFieldSet(this, _PostgreSQLConfig_object, {
-            host: rules.host(),
-            port: rules.port(),
-            user: rules.user(),
-            password: rules.password(),
-            database: rules.database(),
-        }, "f");
-        Object.keys(__classPrivateFieldGet(this, _PostgreSQLConfig_object, "f")).forEach((value) => {
-            if (typeof __classPrivateFieldGet(this, _PostgreSQLConfig_object, "f")[value] == 'undefined') {
-                throw new Error(`PostgreSQL config property "${value}" is missing`);
-            }
-        });
-    }
-    get object() {
-        return __classPrivateFieldGet(this, _PostgreSQLConfig_object, "f");
-    }
-    get redactedObject() {
-        return Object.assign({}, __classPrivateFieldGet(this, _PostgreSQLConfig_object, "f"), { password: '<redacted>' });
-    }
-}
-exports.PostgreSQLConfig = PostgreSQLConfig;
-_PostgreSQLConfig_object = new WeakMap();
+    });
+    return config;
+};
+exports.generate = generate;
+const redacted = (config) => Object.assign({}, config, { password: '<redacted>' });
+exports.redacted = redacted;
