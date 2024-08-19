@@ -3,8 +3,8 @@ import { after, before, describe, it } from 'node:test';
 
 describe('main', () => {
   before(async () => {});
-  it('should pass', async () => {
-    assert.equal(1, 1);
+  it('<name>', async () => {
+    assert.ok(true);
   });
   after(async () => {});
 });
