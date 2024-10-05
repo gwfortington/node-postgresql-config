@@ -24,7 +24,7 @@ export interface Options {
 export declare const generateConfig: (options?: Options) => Config;
 /**
  * Return a copy of the config object with the password
- * redacted (i.e., replaced with '<redacted>'). This is
+ * redacted (i.e., replaced with '********'). This is
  * useful for logging the config object without
  * accidentally leaking the password.
  */

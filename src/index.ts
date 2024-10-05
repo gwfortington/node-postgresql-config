@@ -65,9 +65,9 @@ export const generateConfig = (options: Options = {}): Config => {
 
 /**
  * Return a copy of the config object with the password
- * redacted (i.e., replaced with '<redacted>'). This is
+ * redacted (i.e., replaced with '********'). This is
  * useful for logging the config object without
  * accidentally leaking the password.
  */
 export const redactedConfig = (config: Config): Config =>
-  Object.assign({}, config, { password: '<redacted>' });
+  Object.assign({}, config, { password: '********' });
