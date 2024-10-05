@@ -23,6 +23,20 @@ export interface Options {
   ruleOverrides?: RuleOverrides;
 }
 
+/**
+ * Generate a `Config` object with the following behavior:
+ *
+ * - If `options.filePath` is provided, load environment variables from
+ *   the file at that path using `dotenv`.
+ * - If `options.ruleOverrides` is provided, use those overridden values
+ *   in place of the default values.
+ * - Then, generate a `Config` object using the overridden values.
+ * - Finally, check that all required values are present in the `Config`
+ *   object, and throw an error if any are missing.
+ *
+ * @param {Options} [options]
+ * @returns {Config}
+ */
 export const generate = (options?: Options): Config => {
   if (options && options.filePath) {
     dotenv.config({ path: options.filePath });
@@ -45,5 +59,11 @@ export const generate = (options?: Options): Config => {
   return config;
 };
 
+/**
+ * Return a copy of the config object with the password
+ * redacted (i.e., replaced with '<redacted>'). This is
+ * useful for logging the config object without
+ * accidentally leaking the password.
+ */
 export const redacted = (config: Config): Config =>
   Object.assign({}, config, { password: '<redacted>' });
