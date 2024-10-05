@@ -21,12 +21,12 @@ export interface Options {
  * @param {Options} [options]
  * @returns {Config}
  */
-export declare const generate: (options?: Options) => Config;
+export declare const generateConfig: (options?: Options) => Config;
 /**
  * Return a copy of the config object with the password
  * redacted (i.e., replaced with '<redacted>'). This is
  * useful for logging the config object without
  * accidentally leaking the password.
  */
-export declare const redacted: (config: Config) => Config;
+export declare const redactedConfig: (config: Config) => Config;
 export {};

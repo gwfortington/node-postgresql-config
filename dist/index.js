@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.redacted = exports.generate = void 0;
+exports.redactedConfig = exports.generateConfig = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 const rules = {
     host: () => process.env.POSTGRESQL_HOST || 'localhost',
@@ -29,33 +29,32 @@ const rules = {
  * @param {Options} [options]
  * @returns {Config}
  */
-const generate = (options) => {
-    if (options && options.filePath) {
-        dotenv_1.default.config({ path: options.filePath });
+const generateConfig = (options = {}) => {
+    const { filePath, ruleOverrides = {} } = options;
+    if (filePath) {
+        dotenv_1.default.config({ path: filePath });
     }
-    if (options && options.ruleOverrides) {
-        Object.assign(rules, options.ruleOverrides);
-    }
+    const configRules = Object.assign(Object.assign({}, rules), ruleOverrides);
     const config = {
-        host: rules.host(),
-        port: rules.port(),
-        user: rules.user(),
-        password: rules.password(),
-        database: rules.database(),
+        host: configRules.host(),
+        port: configRules.port(),
+        user: configRules.user(),
+        password: configRules.password(),
+        database: configRules.database(),
     };
-    Object.keys(config).forEach((value) => {
-        if (typeof config[value] == 'undefined') {
-            throw new Error(`PostgreSQL config property "${value}" is missing`);
+    for (const key of Object.keys(config)) {
+        if (typeof config[key] === 'undefined') {
+            throw new Error(`PostgreSQL config property "${key}" is missing`);
         }
-    });
+    }
     return config;
 };
-exports.generate = generate;
+exports.generateConfig = generateConfig;
 /**
  * Return a copy of the config object with the password
  * redacted (i.e., replaced with '<redacted>'). This is
  * useful for logging the config object without
  * accidentally leaking the password.
  */
-const redacted = (config) => Object.assign({}, config, { password: '<redacted>' });
-exports.redacted = redacted;
+const redactedConfig = (config) => Object.assign({}, config, { password: '<redacted>' });
+exports.redactedConfig = redactedConfig;

@@ -37,25 +37,29 @@ export interface Options {
  * @param {Options} [options]
  * @returns {Config}
  */
-export const generate = (options?: Options): Config => {
-  if (options && options.filePath) {
-    dotenv.config({ path: options.filePath });
+export const generateConfig = (options: Options = {}): Config => {
+  const { filePath, ruleOverrides = {} } = options;
+
+  if (filePath) {
+    dotenv.config({ path: filePath });
   }
-  if (options && options.ruleOverrides) {
-    Object.assign(rules, options.ruleOverrides);
-  }
+
+  const configRules = { ...rules, ...ruleOverrides };
+
   const config: Config = {
-    host: rules.host(),
-    port: rules.port(),
-    user: rules.user(),
-    password: rules.password(),
-    database: rules.database(),
+    host: configRules.host(),
+    port: configRules.port(),
+    user: configRules.user(),
+    password: configRules.password(),
+    database: configRules.database(),
   };
-  Object.keys(config).forEach((value) => {
-    if (typeof config[value as keyof Config] == 'undefined') {
-      throw new Error(`PostgreSQL config property "${value}" is missing`);
+
+  for (const key of Object.keys(config) as Array<keyof Config>) {
+    if (typeof config[key] === 'undefined') {
+      throw new Error(`PostgreSQL config property "${key}" is missing`);
     }
-  });
+  }
+
   return config;
 };
 
@@ -65,5 +69,5 @@ export const generate = (options?: Options): Config => {
  * useful for logging the config object without
  * accidentally leaking the password.
  */
-export const redacted = (config: Config): Config =>
+export const redactedConfig = (config: Config): Config =>
   Object.assign({}, config, { password: '<redacted>' });
