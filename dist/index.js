@@ -43,7 +43,7 @@ const generateConfig = (options = {}) => {
         database: configRules.database(),
     };
     for (const key of Object.keys(config)) {
-        if (typeof config[key] === 'undefined') {
+        if (typeof config[key] == 'undefined') {
             throw new Error(`PostgreSQL config property "${key}" is missing`);
         }
     }

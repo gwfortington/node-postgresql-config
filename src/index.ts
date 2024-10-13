@@ -55,7 +55,7 @@ export const generateConfig = (options: Options = {}): Config => {
   };
 
   for (const key of Object.keys(config) as Array<keyof Config>) {
-    if (typeof config[key] === 'undefined') {
+    if (typeof config[key] == 'undefined') {
       throw new Error(`PostgreSQL config property "${key}" is missing`);
     }
   }
