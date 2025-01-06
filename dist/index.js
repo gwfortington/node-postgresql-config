@@ -16,18 +16,21 @@ const rules = {
     database: () => process.env.POSTGRESQL_DATABASE,
 };
 /**
- * Generate a `Config` object with the following behavior:
+ * Generates a `Config` object for PostgreSQL connection.
  *
- * - If `options.filePath` is provided, load environment variables from
- *   the file at that path using `dotenv`.
- * - If `options.ruleOverrides` is provided, use those overridden values
- *   in place of the default values.
- * - Then, generate a `Config` object using the overridden values.
- * - Finally, check that all required values are present in the `Config`
- *   object, and throw an error if any are missing.
+ * - If `options.filePath` is provided, loads environment variables from
+ *   the specified file path using `dotenv`.
+ * - If `options.ruleOverrides` is provided, applies these overrides
+ *   to the default configuration rules.
+ * - Constructs a `Config` object using the resolved rules.
+ * - Validates that all required configuration properties are present
+ *   and throws an error if any are missing.
  *
- * @param {Options} [options]
- * @returns {Config}
+ * @param {Options} [options] - Configuration options, including an optional
+ *   `filePath` for loading environment variables and optional `ruleOverrides`
+ *   for customizing configuration rules.
+ * @returns {Config} - The complete and validated configuration object.
+ * @throws {Error} - Throws an error if any required configuration property is missing.
  */
 const generateConfig = (options = {}) => {
     const { filePath, ruleOverrides = {} } = options;
