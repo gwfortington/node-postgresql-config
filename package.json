@@ -1,7 +1,7 @@
 {
   "name": "node-postgresql-config",
   "version": "1.0.0",
-  "description": "Setup PostgreSQL config object",
+  "description": "A simple configuration utility for PostgreSQL",
   "author": "Grant Fortington",
   "private": true,
   "license": "MIT",
