@@ -24,6 +24,7 @@ const rules = {
  * - Constructs a `Config` object using the resolved rules.
  * - Validates that all required configuration properties are present
  *   and throws an error if any are missing.
+ *
  * @param {Options} [options] Configuration options, including an optional
  *   `filePath` for loading environment variables and optional `ruleOverrides`
  *   for customizing configuration rules.
@@ -53,8 +54,9 @@ const generateConfig = (options = {}) => {
 exports.generateConfig = generateConfig;
 /**
  * Return a copy of the config object with the password
- * redacted (i.e., replaced with '********'). This is
- * useful for logging the config object without
+ * redacted (i.e., replaced with '********').
+ *
+ * This is useful for logging the config object without
  * accidentally leaking the password.
  */
 const redactedConfig = (config) => Object.assign({}, config, { password: '********' });
