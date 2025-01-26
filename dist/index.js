@@ -37,13 +37,7 @@ const generateConfig = (options = {}) => {
         dotenv_1.default.config({ path: filePath });
     }
     const configRules = Object.assign(Object.assign({}, rules), ruleOverrides);
-    const config = {
-        host: configRules.host(),
-        port: configRules.port(),
-        user: configRules.user(),
-        password: configRules.password(),
-        database: configRules.database(),
-    };
+    const config = Object.keys(configRules).reduce((acc, key) => Object.assign(acc, { [key]: configRules[key]() }), {});
     for (const key of Object.keys(config)) {
         if (typeof config[key] == 'undefined') {
             throw new Error(`PostgreSQL config property "${key}" is missing`);

@@ -21,6 +21,10 @@ export interface Options {
   ruleOverrides?: Partial<Rules>;
 }
 
+interface ConfigRules {
+  [key: string]: () => string | number;
+}
+
 /**
  * Generates a `Config` object for PostgreSQL connection.
  * - If `options.filePath` is provided, loads environment variables from
@@ -44,15 +48,12 @@ export const generateConfig = (options: Options = {}): Config => {
     dotenv.config({ path: filePath });
   }
 
-  const configRules = { ...rules, ...ruleOverrides };
+  const configRules: ConfigRules = { ...rules, ...ruleOverrides };
 
-  const config: Config = {
-    host: configRules.host(),
-    port: configRules.port(),
-    user: configRules.user(),
-    password: configRules.password(),
-    database: configRules.database(),
-  };
+  const config = Object.keys(configRules).reduce(
+    (acc, key) => Object.assign(acc, { [key]: configRules[key]() }),
+    {},
+  ) as Config;
 
   for (const key of Object.keys(config) as Array<keyof Config>) {
     if (typeof config[key] == 'undefined') {
