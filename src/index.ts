@@ -16,11 +16,9 @@ const rules: Rules = {
   database: () => process.env.POSTGRESQL_DATABASE!,
 };
 
-export type RuleOverrides = Partial<Rules>;
-
 export interface Options {
   filePath?: string;
-  ruleOverrides?: RuleOverrides;
+  ruleOverrides?: Partial<Rules>;
 }
 
 /**

@@ -2,10 +2,9 @@ import { Config } from 'node-postgresql';
 type Rules = {
     [P in keyof Config]: () => Config[P];
 };
-export type RuleOverrides = Partial<Rules>;
 export interface Options {
     filePath?: string;
-    ruleOverrides?: RuleOverrides;
+    ruleOverrides?: Partial<Rules>;
 }
 /**
  * Generates a `Config` object for PostgreSQL connection.
