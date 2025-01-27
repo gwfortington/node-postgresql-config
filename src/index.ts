@@ -22,7 +22,7 @@ export interface Options {
 }
 
 interface ConfigRules {
-  [key: string]: () => string | number;
+  [key: string]: () => string | number | boolean;
 }
 
 /**
